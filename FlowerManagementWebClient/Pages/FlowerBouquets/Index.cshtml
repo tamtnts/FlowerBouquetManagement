@@ -1,0 +1,85 @@
+﻿@page
+@model FlowerManagementWebClient.Pages.FlowerBouquets.IndexModel
+
+@{
+    ViewData["Title"] = "Flower Bouquets";
+}
+
+<h1>Flower Bouquet List</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<div class="row">
+    <div class="col-md-10">
+        <form method="post" class="row">
+            <div class="form-group col-md-6" style="display: inline-block">
+                <label class="control-label">Search by flower bouquet name:</label>
+                <input class="form-control" asp-for="SearchString" />
+            </div>
+            <div class="form-group col-md-6" style="display: inline-block; margin-top: 30px">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Flower Bouquet Name
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlowerBouquet[0].Description)
+            </th>
+            <th>
+                Unit Price
+            </th>
+            <th>
+                Units In Stock
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlowerBouquet[0].Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlowerBouquet[0].Supplier)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.FlowerBouquet) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FlowerBouquetName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitsInStock)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FlowerBouquetStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.FlowerBouquetId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.FlowerBouquetId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.FlowerBouquetId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

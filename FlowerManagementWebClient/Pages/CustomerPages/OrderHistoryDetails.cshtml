@@ -1,0 +1,51 @@
+﻿@page
+@using Microsoft.AspNetCore.Http;
+@model FlowerManagementWebClient.Pages.CustomerPages.OrderHistoryDetailsModel
+@{
+    ViewData["Title"] = "Order History Details";
+    Layout = "_CustomerLayout";
+    ViewData["id"] = HttpContext.Session.GetInt32("id");
+}
+
+<h1>Order History Details</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Unit Price
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDetail[0].Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDetail[0].Discount)
+            </th>
+            <th>
+                Flower Bouquet
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderDetail)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Discount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FlowerBouquet.FlowerBouquetName)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <a asp-page="./OrderHistory" asp-route-id="@ViewData["id"]">Back to Order History List</a>
+</div>

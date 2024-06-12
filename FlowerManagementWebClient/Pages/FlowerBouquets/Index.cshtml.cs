@@ -1,0 +1,60 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using BusinessObject.Models;
+using System.Net.Http.Headers;
+using System.Net.Http;
+using System.Text.Json;
+
+namespace FlowerManagementWebClient.Pages.FlowerBouquets
+{
+    public class IndexModel : PageModel
+    {
+        private HttpClient client = null;
+        private string FlowerBouquetApiUrl = "";
+
+        public IndexModel() { }
+
+        public IList<FlowerBouquet> FlowerBouquet { get;set; }
+
+        [BindProperty]
+        public string SearchString { get; set; }
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            client = new HttpClient();
+            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+            client.DefaultRequestHeaders.Accept.Add(contentType);
+            FlowerBouquetApiUrl = "https://localhost:44344/api/FlowerBouquets";
+            HttpResponseMessage response = await client.GetAsync(FlowerBouquetApiUrl);
+            string strData = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            FlowerBouquet = JsonSerializer.Deserialize<IList<FlowerBouquet>>(strData, options);
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            client = new HttpClient();
+            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+            client.DefaultRequestHeaders.Accept.Add(contentType);
+            FlowerBouquetApiUrl = "https://localhost:44344/api/FlowerBouquets/Search";
+            string param = $"?name={SearchString}";
+            HttpResponseMessage response = await client.GetAsync(FlowerBouquetApiUrl + param);
+            string strData = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            FlowerBouquet = JsonSerializer.Deserialize<IList<FlowerBouquet>>(strData, options);
+            return Page();
+        }
+    }
+}
